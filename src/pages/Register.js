@@ -1,17 +1,13 @@
-import React, { useState } from "react";
-
-const handleErrors = async (response) => {
-  if (!response.ok) {
-    const { message } = await response.json();
-    throw Error(message);
-  }
-  return response.json;
-};
+import React, { useState, useContext } from "react";
+import { useHistory } from "react-router-dom";
+import { CredentialsContext } from "../App";
+import { handleErrors } from "./Login";
 
 export default function Register() {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
+  const [, setCredentials] = useContext(CredentialsContext);
 
   const register = (e) => {
     e.preventDefault();
@@ -26,12 +22,18 @@ export default function Register() {
       }),
     })
       .then(handleErrors)
-      .then(() => {})
+      .then(() => {
+        setCredentials({ username, password });
+        history.push("/");
+      })
       .catch((error) => {
         console.log("here", error);
         setError(error.message);
       });
   };
+
+  const history = useHistory();
+
   return (
     <div>
       <h1>Registration</h1>
