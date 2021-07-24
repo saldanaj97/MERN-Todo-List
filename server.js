@@ -23,6 +23,18 @@ app.get("/", (req, res) => {
   res.send("Hey");
 });
 
+app.post("/login", async (req, res) => {
+  const { username, password } = req.body;
+  const user = await User.findOne({ username }).exec();
+  if (!user || user.password !== password) {
+    res.status(401);
+    res.json({ message: "Invalid Login." });
+    return;
+  }
+  await User.create({ username, password });
+  res.json({ message: "Successfully logged in. " });
+});
+
 app.post("/register", async (req, res) => {
   const { username, password } = req.body;
   const user = await User.findOne({ username }).exec();
@@ -32,7 +44,7 @@ app.post("/register", async (req, res) => {
     return;
   }
   await User.create({ username, password });
-  res.json({ message: "Success" });
+  res.json({ message: "Success. " });
 });
 
 const db = mongoose.connection;
