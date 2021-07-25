@@ -13,8 +13,18 @@ const userSchema = new mongoose.Schema({
   username: String,
   password: String,
 });
-
 const User = mongoose.model("User", userSchema);
+
+const todoSchema = new mongoose.Schema({
+  userID: String,
+  todos: [
+    {
+      checked: Boolean,
+      text: String,
+    },
+  ],
+});
+const Todos = mongoose.model("Todos", todoSchema);
 
 app.use(cors());
 app.use(express.json());
@@ -45,6 +55,48 @@ app.post("/register", async (req, res) => {
   }
   await User.create({ username, password });
   res.json({ message: "Success. " });
+});
+
+app.get("/todos", async (req, res) => {
+  const { authorization } = req.headers;
+  const [, token] = authorization.split(" ");
+  const [username, password] = token.split(":");
+  const user = await User.findOne({ username }).exec();
+
+  if (!user || user.password !== password) {
+    res.status(403);
+    res.json({ message: "Invalid Access." });
+    return;
+  }
+
+  const todoList = await Todos.findOne({ userID: user._id }).exec();
+  res.json(todoList);
+});
+
+app.post("/todos", async (req, res) => {
+  const { authorization } = req.headers;
+  const [, token] = authorization.split(" ");
+  const [username, password] = token.split(":");
+  const todosItems = req.body;
+  const user = await User.findOne({ username }).exec();
+
+  if (!user || user.password !== password) {
+    res.status(403);
+    res.json({ message: "Invalid Access." });
+    return;
+  }
+
+  const todos = await Todos.findOne({ userID: user._id }).exec();
+  if (!todos) {
+    await Todos.create({
+      userID: user._id,
+      todos: todosItems,
+    });
+  } else {
+    todos.todos = todosItems;
+    await todos.save();
+  }
+  res.json(todosItems);
 });
 
 const db = mongoose.connection;
