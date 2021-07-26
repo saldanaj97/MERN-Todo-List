@@ -21,6 +21,7 @@ const todoSchema = new mongoose.Schema({
     {
       checked: Boolean,
       text: String,
+      id: String,
     },
   ],
 });

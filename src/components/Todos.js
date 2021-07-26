@@ -1,4 +1,5 @@
 import React, { useState, useContext, useEffect } from "react";
+import { v4 as uuidv4 } from "uuid";
 import { CredentialsContext } from "../App";
 
 export default function Todos() {
@@ -39,7 +40,7 @@ export default function Todos() {
   const addTodo = (e) => {
     e.preventDefault();
     if (!todoText) return;
-    const newTodo = { checked: false, text: todoText };
+    const newTodo = { id: uuidv4(), checked: false, text: todoText };
     const newTodos = [...todos, newTodo];
     setTodos(newTodos);
     setTodoText("");
@@ -48,7 +49,7 @@ export default function Todos() {
 
   const toggleTodo = (id) => {
     const newTodoList = [...todos];
-    const todoItem = newTodoList.find((todo) => todo._id === id);
+    const todoItem = newTodoList.find((todo) => todo.id === id);
     todoItem.checked = !todoItem.checked;
     setTodos(newTodoList);
     persist(newTodoList);
@@ -66,16 +67,16 @@ export default function Todos() {
 
   return (
     <div>
-      <select onChange={(e) => changeFilter(e.target.value)}>
+      <select value={filter} onChange={(e) => changeFilter(e.target.value)}>
         <option value="uncompleted">Uncompleted</option>
         <option value="completed">Completed</option>
       </select>
       {todos &&
         getTodos().map((todo) => (
-          <div key={todo._id}>
+          <div key={todo.id}>
             <input
               checked={todo.checked}
-              onChange={() => toggleTodo(todo._id)}
+              onChange={() => toggleTodo(todo.id)}
               id="checkbox1"
               type="checkbox"
             />
