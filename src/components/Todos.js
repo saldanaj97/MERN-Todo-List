@@ -2,11 +2,10 @@ import React, { useState, useContext, useEffect } from "react";
 import { v4 as uuidv4 } from "uuid";
 import { CredentialsContext } from "../App";
 
-export default function Todos() {
+export default function Todos(props) {
   const [todos, setTodos] = useState([]);
   const [todoText, setTodoText] = useState("");
   const [credentials] = useContext(CredentialsContext);
-  const [filter, setFilter] = useState("Completed", "Uncompleted");
 
   const persist = (newTodos) => {
     fetch(`http://localhost:4000/todos`, {
@@ -55,26 +54,23 @@ export default function Todos() {
     persist(newTodoList);
   };
 
-  const getTodos = () => {
+  const getTodos = (filter) => {
     return todos.filter((todo) =>
       filter === "completed" ? todo.checked : !todo.checked
     );
   };
 
-  const changeFilter = (newFilter) => {
-    setFilter(newFilter);
-  };
-
   return (
     <div>
-      <select value={filter} onChange={(e) => changeFilter(e.target.value)}>
+      {/*       <select value={filter} onChange={(e) => changeFilter(e.target.value)}>
         <option value="uncompleted">Uncompleted</option>
         <option value="completed">Completed</option>
-      </select>
+      </select> */}
       {todos &&
-        getTodos().map((todo) => (
+        getTodos(props.filter).map((todo) => (
           <div key={todo.id}>
             <input
+              class="checkboxes"
               checked={todo.checked}
               onChange={() => toggleTodo(todo.id)}
               id="checkbox1"
@@ -95,7 +91,18 @@ export default function Todos() {
           onChange={(e) => setTodoText(e.target.value)}
           type="text"
         ></input>
-        <button>Add</button>
+        <button
+          style={{
+            background: "hsl(348, 86%, 43%)",
+            color: "white",
+            borderRadius: "10px",
+            width: "20%",
+            fontWeight: "bold",
+          }}
+          class="button is-small"
+        >
+          Add
+        </button>
       </form>
     </div>
   );

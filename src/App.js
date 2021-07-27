@@ -8,7 +8,7 @@ import "./App.css";
 export const CredentialsContext = React.createContext(null);
 
 function App() {
-  const credentialsState = useState({ username: "john", password: "1234" });
+  const credentialsState = useState(null);
 
   return (
     <div className="App">
