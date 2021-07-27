@@ -83,13 +83,14 @@ export default function Welcome() {
               <ul>
                 <li>
                   <button
-                    value="uncompleted"
                     type="button"
                     class="filter-buttons"
                     onClick={() => {
                       changeFilter("uncompleted");
                     }}
-                  />
+                  >
+                    Uncompleted
+                  </button>
                 </li>
                 <li>
                   <button
@@ -98,7 +99,9 @@ export default function Welcome() {
                     onClick={() => {
                       changeFilter("completed");
                     }}
-                  />
+                  >
+                    Completed
+                  </button>
                 </li>
               </ul>
             </div>
