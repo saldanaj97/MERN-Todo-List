@@ -83,24 +83,22 @@ export default function Welcome() {
               <ul>
                 <li>
                   <button
+                    value="uncompleted"
                     type="button"
                     class="filter-buttons"
                     onClick={() => {
                       changeFilter("uncompleted");
                     }}
-                  >
-                    Uncompleted
-                  </button>
+                  />
                 </li>
                 <li>
                   <button
+                    value="completed"
                     class="filter-buttons"
                     onClick={() => {
                       changeFilter("completed");
                     }}
-                  >
-                    Completed
-                  </button>
+                  />
                 </li>
               </ul>
             </div>
@@ -110,8 +108,3 @@ export default function Welcome() {
     </section>
   );
 }
-
-/*       <select value={filter} onChange={(e) => changeFilter(e.target.value)}>
-        <option value="uncompleted">Uncompleted</option>
-        <option value="completed">Completed</option>
-      </select> */
